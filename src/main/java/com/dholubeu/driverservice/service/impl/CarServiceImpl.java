@@ -33,8 +33,8 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car findById(Long id) {
-        return carRepository.findById(id).orElseThrow(
-                () -> new ResourceDoesNotExistException(
+        return carRepository.findById(id)
+                .orElseThrow(() -> new ResourceDoesNotExistException(
                         String.format(RESOURCE_DOES_NOT_EXIST_BY_ID_MESSAGE, id)));
     }
 
