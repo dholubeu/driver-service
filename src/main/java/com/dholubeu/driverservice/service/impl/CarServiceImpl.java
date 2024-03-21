@@ -9,13 +9,13 @@ import com.dholubeu.driverservice.service.DriverService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.dholubeu.driverservice.util.Constants.RESOURCE_ALREADY_EXISTS_MESSAGE;
+import static com.dholubeu.driverservice.util.Constants.RESOURCE_DOES_NOT_EXIST_BY_ID_MESSAGE;
+
 @Service
 @RequiredArgsConstructor
 public class CarServiceImpl implements CarService {
 
-    public static final String RESOURCE_ALREADY_EXISTS_MESSAGE =
-            "Car with number %s has been already registered";
-    public static final String RESOURCE_DOES_NOT_EXIST_BY_ID_MESSAGE = "Car with id %d does not exist";
 
     private final CarRepository carRepository;
     private final DriverService driverService;

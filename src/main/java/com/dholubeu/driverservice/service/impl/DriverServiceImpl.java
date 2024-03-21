@@ -1,13 +1,10 @@
 package com.dholubeu.driverservice.service.impl;
 
-import com.dholubeu.driverservice.domain.Car;
-import com.dholubeu.driverservice.domain.Card;
-import com.dholubeu.driverservice.domain.Coordinate;
-import com.dholubeu.driverservice.domain.Driver;
-import com.dholubeu.driverservice.domain.Driver.Status;
+import com.dholubeu.driverservice.domain.*;
 import com.dholubeu.driverservice.domain.exception.IllegalOperationException;
 import com.dholubeu.driverservice.domain.exception.ResourceAlreadyExistsException;
 import com.dholubeu.driverservice.domain.exception.ResourceDoesNotExistException;
+import com.dholubeu.driverservice.domain.Status;
 import com.dholubeu.driverservice.repository.DriverRepository;
 import com.dholubeu.driverservice.service.CoordinateService;
 import com.dholubeu.driverservice.service.DriverService;

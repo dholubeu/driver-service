@@ -68,12 +68,5 @@ public class Driver {
 
     private BigDecimal balance;
 
-    public enum Status {
-
-        AVAILABLE,
-        IN_RIDE,
-        OFF_DUTY
-
-    }
 
 }

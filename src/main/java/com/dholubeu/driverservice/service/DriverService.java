@@ -3,7 +3,7 @@ package com.dholubeu.driverservice.service;
 import com.dholubeu.driverservice.domain.Car;
 import com.dholubeu.driverservice.domain.Card;
 import com.dholubeu.driverservice.domain.Driver;
-import com.dholubeu.driverservice.domain.Driver.Status;
+import com.dholubeu.driverservice.domain.Status;
 
 import java.math.BigDecimal;
 import java.util.List;
