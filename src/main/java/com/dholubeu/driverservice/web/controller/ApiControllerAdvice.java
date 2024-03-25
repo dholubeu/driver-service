@@ -39,7 +39,7 @@ public class ApiControllerAdvice {
     }
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponseDto handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
         log.error(ex.getMessage());
         return new ErrorResponseDto(List.of(ex.getMessage()));

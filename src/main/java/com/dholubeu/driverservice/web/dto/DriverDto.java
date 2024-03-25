@@ -62,8 +62,8 @@ public class DriverDto {
             groups = {OnCreate.class, OnUpdate.class})
     private BigDecimal drivingExperience;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Driver.Status status;
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    private Driver.Status status;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private BigDecimal balance;

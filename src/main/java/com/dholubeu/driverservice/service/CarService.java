@@ -1,14 +1,15 @@
 package com.dholubeu.driverservice.service;
 
 import com.dholubeu.driverservice.domain.Car;
+import com.dholubeu.driverservice.web.dto.CarDto;
 
 public interface CarService {
 
-    Car findById(Long id);
+    CarDto findById(Long id);
 
-    Car create(Long driverId, Car car);
+    CarDto create(Long driverId, CarDto carDto);
 
-    Car updateCurrentAddress(Long id, String currentAddress);
+    CarDto updateCurrentAddress(Long id, String currentAddress);
 
     void delete(Long id);
 

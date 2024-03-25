@@ -8,6 +8,8 @@ import com.dholubeu.driverservice.domain.Status;
 import com.dholubeu.driverservice.repository.DriverRepository;
 import com.dholubeu.driverservice.service.CoordinateService;
 import com.dholubeu.driverservice.service.DriverService;
+import com.dholubeu.driverservice.web.dto.DriverDto;
+import com.dholubeu.driverservice.web.mapper.DriverMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,40 +19,40 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.ArrayList;
 
+import static com.dholubeu.driverservice.util.Constants.*;
+
 @Service
 @RequiredArgsConstructor
 public class DriverServiceImpl implements DriverService {
 
-    public static final String RESOURCE_ALREADY_EXISTS_MESSAGE = "Driver with email %s already exists";
-    public static final String RESOURCE_DOES_NOT_EXIST_BY_ID_MESSAGE = "Driver with id %d does not exist";
-    public static final String RESOURCE_DOES_NOT_EXIST_BY_EMAIL_MESSAGE = "Driver with email %s does not exist";
-    public static final String ILLEGAL_OPERATION_EXCEPTION_MESSAGE =
-            "Driver with id %d is not activated";
-
     private final DriverRepository driverRepository;
+    private final DriverMapper driverMapper;
     private final CoordinateService coordinateService;
 
     @Override
-    public Driver create(Driver driver) {
-        if (driverRepository.existsByEmail(driver.getEmail())) {
+    public DriverDto create(DriverDto driverDto) {
+
+        if (driverRepository.existsByEmail(driverDto.getEmail())) {
             throw new ResourceAlreadyExistsException(String.format(
-                    RESOURCE_ALREADY_EXISTS_MESSAGE, driver.getEmail()));
+                    RESOURCE_ALREADY_EXISTS_MESSAGE, driverDto.getEmail()));
         }
+        Driver driver = driverMapper.toEntity(driverDto);
         driver.setStatus(Status.OFF_DUTY);
         driver.setRating(BigDecimal.valueOf(0.0));
         driver.setBalance(BigDecimal.valueOf(0.0));
-        return driverRepository.save(driver);
+        return driverMapper.toDto(driver);
     }
 
     @Override
-    public Driver findById(Long id) {
-        return driverRepository.findById(id).orElseThrow(
+    public DriverDto findById(Long id) {
+        var driver = driverRepository.findById(id).orElseThrow(
                 () -> new ResourceDoesNotExistException(
                         String.format(RESOURCE_DOES_NOT_EXIST_BY_ID_MESSAGE, id)));
+        return driverMapper.toDto(driver);
     }
 
     @Override
-    public List<Driver> findNearest(BigDecimal longitude, BigDecimal latitude) {
+    public List<DriverDto> findNearest(BigDecimal longitude, BigDecimal latitude) {
         List<Driver> drivers = driverRepository.findAllByStatus(Status.AVAILABLE);
         Map<BigDecimal, Driver> distances = new TreeMap<>();
         for (Driver driver : drivers) {
@@ -64,40 +66,49 @@ public class DriverServiceImpl implements DriverService {
         if (nearestDrivers.size() > 10) {
             nearestDrivers = nearestDrivers.subList(0, 10);
         }
-        return nearestDrivers;
+        //return nearestDrivers;
+        return driverMapper.toDto(nearestDrivers);
     }
 
     @Override
-    public Driver findByEmail(String email) {
-        return driverRepository.findByEmail(email).orElseThrow(
+    public DriverDto findByEmail(String email) {
+        var driver = driverRepository.findByEmail(email).orElseThrow(
                 () -> new ResourceDoesNotExistException(
                         String.format(RESOURCE_DOES_NOT_EXIST_BY_EMAIL_MESSAGE, email)));
+        return driverMapper.toDto(driver);
     }
 
     @Override
-    public Driver activate(Long id) {
-        Driver driver = findById(id);
+    public DriverDto activate(Long id) {
+        var driver = driverRepository.findById(id).orElseThrow(
+                () -> new ResourceDoesNotExistException(
+                        String.format(RESOURCE_DOES_NOT_EXIST_BY_ID_MESSAGE, id)));
         driver.setActivated(true);
-        return driverRepository.save(driver);
+        return driverMapper.toDto(driver);
     }
 
     @Override
-    public Driver addCar(Long id, Car car) {
-        Driver driver = findById(id);
+    public DriverDto addCar(Long id, Car car) {
+        var driver = driverRepository.findById(id).orElseThrow(
+                () -> new ResourceDoesNotExistException(
+                        String.format(RESOURCE_DOES_NOT_EXIST_BY_ID_MESSAGE, id)));
         driver.setCar(car);
-        return driverRepository.save(driver);
+        return driverMapper.toDto(driver);
     }
 
     @Override
-    public Driver addCard(Long id, Card card) {
-        Driver driver = findById(id);
+    public DriverDto addCard(Long id, Card card) {
+        Driver driver = driverRepository.findById(id)
+                .orElseThrow(() -> new ResourceDoesNotExistException(""));
         driver.setCard(card);
-        return driverRepository.save(driver);
+        return driverMapper.toDto(driver);
     }
 
     @Override
-    public Driver update(Long id, Driver driver) {
-        Driver driverUpdated = findById(id);
+    public DriverDto update(Long id, DriverDto driverDto) {
+        Driver driver = driverMapper.toEntity(driverDto);
+        Driver driverUpdated = driverRepository.findById(id)
+                .orElseThrow(() -> new ResourceDoesNotExistException(""));
         driverUpdated = Driver.builder()
                 .id(driverUpdated.getId())
                 .email(driverUpdated.getEmail())
@@ -112,32 +123,39 @@ public class DriverServiceImpl implements DriverService {
                 .status(driverUpdated.getStatus())
                 .balance(driverUpdated.getBalance())
                 .build();
-        return driverRepository.save(driverUpdated);
+        driverRepository.save(driverUpdated);
+        return driverMapper.toDto(driver);
     }
 
     @Override
-    public Driver updateStatus(Long id, Status status) {
-        Driver driver = findById(id);
+    public DriverDto updateStatus(Long id, Status status) {
+        Driver driver = driverRepository.findById(id)
+                .orElseThrow(() -> new ResourceDoesNotExistException(""));
         if (!driver.isActivated()) {
             throw new IllegalOperationException(String.format(
                     ILLEGAL_OPERATION_EXCEPTION_MESSAGE, id));
         }
         driver.setStatus(status);
-        return driverRepository.save(driver);
+        driverRepository.save(driver);
+        return driverMapper.toDto(driver);
     }
 
     @Override
-    public Driver updateRating(Long id, BigDecimal rating) {
-        Driver driver = findById(id);
+    public DriverDto updateRating(Long id, BigDecimal rating) {
+        Driver driver = driverRepository.findById(id)
+                .orElseThrow(() -> new ResourceDoesNotExistException(""));
         driver.setRating(rating);
-        return driverRepository.save(driver);
+        driverRepository.save(driver);
+        return driverMapper.toDto(driver);
     }
 
     @Override
-    public Driver updateBalance(Long id, BigDecimal newBalance) {
-        Driver driver = findById(id);
+    public DriverDto updateBalance(Long id, BigDecimal newBalance) {
+        Driver driver = driverRepository.findById(id)
+                .orElseThrow(() -> new ResourceDoesNotExistException(""));
         driver.setBalance(newBalance);
-        return driverRepository.save(driver);
+        driverRepository.save(driver);
+        return driverMapper.toDto(driver);
     }
 
 }

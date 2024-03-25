@@ -15,12 +15,13 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+import static com.dholubeu.driverservice.util.Constants.URL;
+
 @Service
 @RequiredArgsConstructor
 public class CoordinateServiceImpl implements CoordinateService {
 
-    public static final String URL =
-            "https://nominatim.openstreetmap.org/search?q=%s&format=json&polygon_kml=1&addressdetails=1";
+
     public static final String QUERY = "SELECT calculate_distance(:lat1, :lon1, :lat2, :lon2)";
 
     @Autowired

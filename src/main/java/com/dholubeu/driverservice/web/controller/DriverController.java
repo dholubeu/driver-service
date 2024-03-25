@@ -3,6 +3,7 @@ package com.dholubeu.driverservice.web.controller;
 import com.dholubeu.driverservice.domain.Car;
 import com.dholubeu.driverservice.domain.Card;
 import com.dholubeu.driverservice.domain.Driver;
+import com.dholubeu.driverservice.domain.Status;
 import com.dholubeu.driverservice.service.CarService;
 import com.dholubeu.driverservice.service.CardService;
 import com.dholubeu.driverservice.service.DriverService;
@@ -44,89 +45,74 @@ public class DriverController {
     private final CardService cardService;
     private final CarService carService;
     private final MinioService minioService;
-    private final DriverMapper driverMapper;
-    private final CardMapper cardMapper;
-    private final CarMapper carMapper;
+
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public DriverDto create(@RequestBody @Validated(OnCreate.class) DriverDto driverDto) {
-        Driver driver = driverMapper.toEntity(driverDto);
-        driver = driverService.create(driver);
-        return driverMapper.toDto(driver);
+        return driverService.create(driverDto);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public DriverDto findById(@PathVariable Long id) {
-        Driver driver = driverService.findById(id);
-        return driverMapper.toDto(driver);
+        return driverService.findById(id);
     }
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<DriverDto> findNearest(@RequestParam BigDecimal latitude,
                                        @RequestParam BigDecimal longitude) {
-        List<Driver> drivers = driverService.findNearest(latitude, longitude);
-        return driverMapper.toDto(drivers);
+        return driverService.findNearest(longitude, latitude);
     }
 
     @PutMapping("/activate/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public DriverDto activate(@PathVariable Long id) {
-        Driver driver = driverService.activate(id);
-        return driverMapper.toDto(driver);
+        return driverService.activate(id);
     }
 
     @PostMapping("/{id}/cards")
     @ResponseStatus(HttpStatus.CREATED)
     public CardDto createCard(@PathVariable Long id,
                               @RequestBody @Validated(OnCreate.class) CardDto cardDto) {
-        Card card = cardMapper.toEntity(cardDto);
-        card = cardService.create(id, card);
-        return cardMapper.toDto(card);
+
+        return cardService.create(id, cardDto);
     }
 
     @PostMapping("/{id}/cars")
     @ResponseStatus(HttpStatus.CREATED)
     public CarDto createCar(@PathVariable Long id,
                             @RequestBody @Validated(OnCreate.class) CarDto carDto) {
-        Car car = carMapper.toEntity(carDto);
-        car = carService.create(id, car);
-        return carMapper.toDto(car);
+        return carService.create(id, carDto);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public DriverDto update(@PathVariable Long id,
                             @RequestBody @Validated(OnUpdate.class) DriverDto driverDto) {
-        Driver driver = driverMapper.toEntity(driverDto);
-        driver = driverService.update(id, driver);
-        return driverMapper.toDto(driver);
+        return driverService.update(id, driverDto);
     }
 
     @PutMapping("/{id}/statuses")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public DriverDto updateStatus(@PathVariable Long id,
-                                  @RequestParam Driver.Status status) {
-        Driver driver = driverService.updateStatus(id, status);
-        return driverMapper.toDto(driver);
+                                  @RequestParam Status status) {
+        return driverService.updateStatus(id, status);
     }
 
     @PutMapping("/{id}/ratings")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public DriverDto updateRating(@PathVariable Long id,
                                   @RequestParam BigDecimal rating) {
-        Driver driver = driverService.updateRating(id, rating);
-        return driverMapper.toDto(driver);
+        return driverService.updateRating(id, rating);
     }
 
     @PutMapping("/{driverId}/cards/{cardId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public CardDto updateBalance(@PathVariable Long driverId, @PathVariable Long cardId,
                                  @RequestParam BigDecimal amount) {
-        Card card = cardService.updateBalance(driverId, cardId, amount);
-        return cardMapper.toDto(card);
+        return cardService.updateBalance(driverId, cardId, amount);
     }
 
     @DeleteMapping("/cards/{id}")
@@ -138,16 +124,14 @@ public class DriverController {
     @GetMapping("/cards/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CardDto findCardById(@PathVariable Long id) {
-        Card card = cardService.findById(id);
-        return cardMapper.toDto(card);
+        return cardService.findById(id);
     }
 
     @PutMapping("/cars/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public CarDto updateCurrentAddress(@PathVariable Long id,
                                        @RequestParam String currentAddress) {
-        Car car = carService.updateCurrentAddress(id, currentAddress);
-        return carMapper.toDto(car);
+        return carService.updateCurrentAddress(id, currentAddress);
     }
 
     @DeleteMapping("/cars/{id}")
@@ -159,8 +143,7 @@ public class DriverController {
     @GetMapping("/cars/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CarDto findCarById(@PathVariable Long id) {
-        Car car = carService.findById(id);
-        return carMapper.toDto(car);
+        return carService.findById(id);
     }
 
     @PostMapping("/{id}/files")

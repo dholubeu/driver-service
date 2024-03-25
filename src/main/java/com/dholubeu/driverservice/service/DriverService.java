@@ -4,32 +4,33 @@ import com.dholubeu.driverservice.domain.Car;
 import com.dholubeu.driverservice.domain.Card;
 import com.dholubeu.driverservice.domain.Driver;
 import com.dholubeu.driverservice.domain.Status;
+import com.dholubeu.driverservice.web.dto.DriverDto;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public interface DriverService {
 
-    Driver create(Driver driver);
+    DriverDto create(DriverDto driverDto);
 
-    Driver findById(Long id);
+    DriverDto findById(Long id);
 
-    List<Driver> findNearest(BigDecimal longitude, BigDecimal latitude);
+    List<DriverDto> findNearest(BigDecimal longitude, BigDecimal latitude);
 
-    Driver findByEmail(String email);
+    DriverDto findByEmail(String email);
 
-    Driver activate(Long id);
+    DriverDto activate(Long id);
 
-    Driver addCar(Long id, Car car);
+    DriverDto addCar(Long id, Car car);
 
-    Driver addCard(Long id, Card card);
+    DriverDto addCard(Long id, Card card);
 
-    Driver update(Long id, Driver driver);
+    DriverDto update(Long id, DriverDto driverDto);
 
-    Driver updateStatus(Long id, Status status);
+    DriverDto updateStatus(Long id, Status status);
 
-    Driver updateRating(Long id, BigDecimal rating);
+    DriverDto updateRating(Long id, BigDecimal rating);
 
-    Driver updateBalance(Long id, BigDecimal newBalance);
+    DriverDto updateBalance(Long id, BigDecimal newBalance);
 
 }
