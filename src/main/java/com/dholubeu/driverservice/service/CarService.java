@@ -1,6 +1,5 @@
 package com.dholubeu.driverservice.service;
 
-import com.dholubeu.driverservice.domain.Car;
 import com.dholubeu.driverservice.web.dto.CarDto;
 
 public interface CarService {

@@ -1,6 +1,5 @@
 package com.dholubeu.driverservice.service;
 
-import com.dholubeu.driverservice.domain.Card;
 import com.dholubeu.driverservice.web.dto.CardDto;
 
 import java.math.BigDecimal;

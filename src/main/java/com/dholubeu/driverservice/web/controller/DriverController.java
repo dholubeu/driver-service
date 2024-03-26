@@ -1,8 +1,5 @@
 package com.dholubeu.driverservice.web.controller;
 
-import com.dholubeu.driverservice.domain.Car;
-import com.dholubeu.driverservice.domain.Card;
-import com.dholubeu.driverservice.domain.Driver;
 import com.dholubeu.driverservice.domain.Status;
 import com.dholubeu.driverservice.service.CarService;
 import com.dholubeu.driverservice.service.CardService;
@@ -13,9 +10,6 @@ import com.dholubeu.driverservice.web.dto.CardDto;
 import com.dholubeu.driverservice.web.dto.DriverDto;
 import com.dholubeu.driverservice.web.dto.validation.OnCreate;
 import com.dholubeu.driverservice.web.dto.validation.OnUpdate;
-import com.dholubeu.driverservice.web.mapper.CarMapper;
-import com.dholubeu.driverservice.web.mapper.CardMapper;
-import com.dholubeu.driverservice.web.mapper.DriverMapper;
 import com.dholubeu.driverservice.web.validator.ValidFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api/v1/drivers")
 @RequiredArgsConstructor
@@ -45,7 +38,6 @@ public class DriverController {
     private final CardService cardService;
     private final CarService carService;
     private final MinioService minioService;
-
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
