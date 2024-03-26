@@ -2,7 +2,6 @@ package com.dholubeu.driverservice.service;
 
 import com.dholubeu.driverservice.domain.Car;
 import com.dholubeu.driverservice.domain.Card;
-import com.dholubeu.driverservice.domain.Driver;
 import com.dholubeu.driverservice.domain.Status;
 import com.dholubeu.driverservice.web.dto.DriverDto;
 

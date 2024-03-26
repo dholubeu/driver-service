@@ -11,17 +11,19 @@ import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-
-import static com.dholubeu.driverservice.util.Constants.URL;
 
 @Service
 @RequiredArgsConstructor
 public class CoordinateServiceImpl implements CoordinateService {
 
-
+    @Value("${app.url}")
+    public final String URL;
+    public static final String SPACE_REGEXP = " ";
+    public static final String PLUS_REGEXP = "+";
     public static final String QUERY = "SELECT calculate_distance(:lat1, :lon1, :lat2, :lon2)";
 
     @Autowired
@@ -30,7 +32,7 @@ public class CoordinateServiceImpl implements CoordinateService {
     @Override
     @SneakyThrows
     public Coordinate getCoordinates(String currentAddress) {
-        currentAddress = currentAddress.replace(" ", "+");
+        currentAddress = currentAddress.replace(SPACE_REGEXP, PLUS_REGEXP);
         String finalUrl = String.format(URL, currentAddress);
         HttpResponse<JsonNode> response = Unirest
                 .get(finalUrl)

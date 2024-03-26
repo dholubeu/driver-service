@@ -16,7 +16,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
 import static com.dholubeu.driverservice.util.Constants.ILLEGAL_OPERATION_EXCEPTION_MESSAGE;
-import static com.dholubeu.driverservice.util.Constants.RESOURCE_DOES_NOT_EXIST_BY_ID_MESSAGE;
+import static com.dholubeu.driverservice.util.Constants.CARD_DOES_NOT_EXIST_BY_ID_MESSAGE;
+import static com.dholubeu.driverservice.util.Constants.DRIVER_DOES_NOT_EXIST_BY_ID_MESSAGE;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +31,9 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDto findById(Long id) {
-        var card = cardRepository.findById(id).orElseThrow(
+        Card card = cardRepository.findById(id).orElseThrow(
                 () -> new ResourceDoesNotExistException(
-                        String.format(RESOURCE_DOES_NOT_EXIST_BY_ID_MESSAGE, id)));
+                        String.format(CARD_DOES_NOT_EXIST_BY_ID_MESSAGE, id)));
         return cardMapper.toDto(card);
     }
 
@@ -48,11 +49,11 @@ public class CardServiceImpl implements CardService {
     @Override
     public CardDto updateBalance(Long driverId, Long cardId, BigDecimal amount) {
         Driver driver = driverRepository.findById(driverId)
-                .orElseThrow(() -> new ResourceDoesNotExistException(""));
-
-        var card = cardRepository.findById(cardId).orElseThrow(
+                .orElseThrow(() -> new ResourceDoesNotExistException(
+                        DRIVER_DOES_NOT_EXIST_BY_ID_MESSAGE));
+        Card card = cardRepository.findById(cardId).orElseThrow(
                 () -> new ResourceDoesNotExistException(
-                        String.format(RESOURCE_DOES_NOT_EXIST_BY_ID_MESSAGE, cardId)));
+                        String.format(CARD_DOES_NOT_EXIST_BY_ID_MESSAGE, cardId)));
 
         if (driver.getBalance().compareTo(amount) < 0) {
             throw new IllegalOperationException(String.format(
@@ -61,7 +62,6 @@ public class CardServiceImpl implements CardService {
         BigDecimal newBalance = driver.getBalance().subtract(amount);
         driverService.updateBalance(driver.getId(), newBalance);
         card.setBalance(card.getBalance().add(amount));
-
         cardRepository.save(card);
         return cardMapper.toDto(card);
     }

@@ -1,6 +1,6 @@
 package com.dholubeu.driverservice.web.dto;
 
-import com.dholubeu.driverservice.domain.Driver;
+import com.dholubeu.driverservice.domain.Status;
 import com.dholubeu.driverservice.web.dto.validation.OnCreate;
 import com.dholubeu.driverservice.web.dto.validation.OnUpdate;
 import com.dholubeu.driverservice.web.validator.ValidAge;
@@ -62,8 +62,8 @@ public class DriverDto {
             groups = {OnCreate.class, OnUpdate.class})
     private BigDecimal drivingExperience;
 
-//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-//    private Driver.Status status;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Status status;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private BigDecimal balance;
